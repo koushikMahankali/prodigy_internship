@@ -1,0 +1,66 @@
+TITLE:-
+Develop a packet sniffer tool that captures and analyzes network packets. Display relevant information such as source and destination IP addresses, protocols, and payload data. Ensure the ethical use of the tool for educational purposes.
+
+Packet Sniffing Tool:
+
+Unveil the secrets of network traffic with this Python tool. It leverages the Scapy library to capture and analyze packets flowing through your network, but remember to use it responsibly.
+
+Important Note: Packet sniffing can be a powerful tool for network monitoring and analysis. However, it's crucial to use it ethically and with proper authorization. Using a packet sniffer on a network without permission is a violation of privacy and may be illegal.
+
+Features:
+
+Packet Capture: Captures network packets flowing through the interface you specify.
+Protocol Identification: Identifies the protocol used in each packet (TCP, UDP, ICMP, etc.).
+IP Address Tracking: Tracks source and destination IP addresses for network traffic.
+Payload Analysis (Limited): Displays the payload of captured packets for basic analysis (may not be human-readable for all protocols).
+Logging: Logs captured packet information (source/destination IP, protocol, payload) to a file for further analysis.
+How to Use:
+
+Save the Script: Save the script as packet_sniffer.py (or your preferred name).
+Run the Script: Execute the script from the command line using python packet_sniffer.py.
+Start Sniffing: The program will start capturing packets.
+Stop Sniffing: Press Ctrl+C to stop the packet sniffing process.
+Captured Packets: The captured packet information will be logged to the file packet_log.txt.
+Ethical Considerations:
+
+Consent: Always obtain explicit permission before using a packet sniffer on a network.
+Security: Be aware of the potential security risks associated with packet sniffing, such as exposing sensitive information.
+Legal Issues: Using a packet sniffer without authorization may be illegal in certain jurisdictions.
+
+CODE:-
+
+#PacketSniffingTool Using Scapy Module In Python
+#To Run In This Tool In Windows Use Ncap Application For Sniffing 
+from scapy.layers.inet import *
+from scapy.all import *
+from colorama import Fore, Back
+
+# Packet callback function
+def packet_callback(packet):
+    if IP in packet:
+        src_ip = packet[IP].src
+        dst_ip = packet[IP].dst
+        proto = packet[IP].proto
+
+        log_data = Back.BLACK + Fore.RED + f"Source IP: {src_ip} --> Destination IP: {dst_ip} | Protocol: {proto}\n"
+        if TCP in packet:
+            payload = packet[TCP].payload
+            log_data += Fore.GREEN + f"TCP Payload: {payload}\n"
+        elif UDP in packet:
+            payload = packet[UDP].payload
+            log_data += Fore.YELLOW + f"UDP Payload: {payload}\n"
+        elif ICMP in packet:
+            payload = packet[ICMP].payload
+            log_data += Fore.CYAN + f"ICMP Payload: {payload}\n"
+
+        print(log_data)  # Print to console
+        with open("packet_log.txt", "a") as log_file:
+            log_file.write(log_data)
+        print("Packet logged.")
+
+try:
+    print("Starting packet sniffing...")
+    print(Back.WHITE + "Press Ctrl+C to stop.")
+    sniff(prn=packet_callback, filter="ip")
+except KeyboardInterrupt:
+    print("Packet sniffing interrupted by user. Exiting.")

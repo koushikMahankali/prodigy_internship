@@ -1,0 +1,71 @@
+TITLE :
+Build a tool that assesses the strength of a password based on criteria such as length, presence of uppercase and lowercase letters, numbers, and special characters. Provide feedback to users on the password's strength.
+
+Password Complexity Checker
+This Python tool,empowers you to create robust passwords. It analyzes their strength and offers valuable security recommendations to enhance your online security posture.
+
+Features:
+
+Strength Assessment: Analyzes your password based on various criteria, providing a clear evaluation of its complexity.
+Hidden Input: Ensures privacy by using getpass to mask your password input while typing (only the first and last characters are displayed).
+Strength Levels: Categorizes password strength as "Very Strong," "Moderately Strong," "Strong," or "Weak" based on the criteria it meets.
+Security Tips: Offers actionable tips to guide you in creating more secure passwords.
+How to Use:
+
+Save the Script: Save the script as password_checker.py (or your preferred name).
+Run the Script: Execute the script from the command line using python password_checker.py.
+Password Input: Enter your password when prompted. Remember, your input will be masked for privacy.
+Strength Assessment: The program will analyze your password and display its strength level along with a detailed explanation.
+Security Tips: Review the valuable recommendations provided by the script to improve your password creation habits.
+Security Tips:
+
+The script also provides valuable tips for creating robust passwords:
+
+Length Matters: Aim for at least 12 characters.
+Character Mix: Use a combination of uppercase, lowercase, numbers, and symbols.
+Avoid Predictability: Steer clear of easily guessable information like your name or birthday.
+No Personal Details: Don't include personal details in your password.
+Consider Passphrases: Explore combining words or a sentence for easier remembering.
+Uniqueness: Create unique passwords for each online account.
+Regular Updates: Change your passwords periodically.
+Enable 2FA: Utilize Two-Factor Authentication where available.
+Beware of Phishing: Be cautious about entering passwords on suspicious websites.
+Password Managers: Leverage a password manager for secure and unique password storage.
+
+CODE:-
+
+#Password_Complexity_Checker
+import re
+import getpass
+print("Password Complexity Checking Tool")
+def assess_password_strength(password):
+    has_numbers = any(char.isdigit() for char in password)
+    has_upper_lower_case = any(char.isupper() or char.islower() for char in password)
+    meets_length_requirement = len(password) >= 8
+    has_special_characters = bool(re.search(r"[!@#$%^&*(),.?\":{}|<>]", password))
+    met_criteria_count = sum([has_numbers, has_upper_lower_case, meets_length_requirement, has_special_characters])
+    if met_criteria_count == 4:
+        return "Password Strength Level: Very Strong (All criteria are met)."
+    elif met_criteria_count == 3:
+        return "Password Strength Level: Moderately Strong (Any 3 criteria are met)."
+    elif met_criteria_count == 2:
+        return "Password Strength Level: Strong (Any 2 criteria are met)."
+    else:
+        return "Password Strength Level: Weak (None or only one criterion is met)."
+password_input = getpass.getpass("Enter your password: ")
+masked_password = password_input[0] + '#' * (len(password_input) - 2) + password_input[-1]
+result = assess_password_strength(password_input)
+print("Entered Password: {}".format(masked_password))
+print("")
+print(result)
+print("")
+tips = [
+    "Here are some quick tips for creating a secure password:",
+    "1. Length: Aim for at least 12 characters.",
+    "2. Mix Characters: Use a combination of uppercase, lowercase, numbers, and symbols.",
+    "3. Avoid Common Words: Don't use easily guessable information.",
+    "4. No Personal Info: Avoid using names, birthdays, or personal details.",
+    "5. Use Passphrases: Consider combining multiple words or a sentence.",
+]
+for tip in tips:
+    print(tip)

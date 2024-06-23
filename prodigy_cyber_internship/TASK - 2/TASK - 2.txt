@@ -1,0 +1,103 @@
+TITLE:
+Develop a simple image encryption tool using pixel manipulation. You can perform operations like swapping pixel values or applying a basic mathematical operation to each pixel. Allow users to encrypt and decrypt images.
+This Python tool empowers you to encrypt and decrypt images using a simplified Caesar Cipher-like approach.
+
+Features:
+
+Encryption: Secure images with a user-defined key, applying a Caesar Cipher-inspired technique.
+Decryption: Recover encrypted images using the corresponding key.
+Installation:
+
+Before embarking on your image encryption journey, you'll need to install the Pillow library. This library provides essential functionalities for image processing. You can install it using the following command:
+
+pip install Pillow
+
+Usage:
+Save the Script: Save the script as image_encryption.py (or your preferred name).
+Run the Script: Execute the script from the command line using python image_encryption.py.
+Interactive Menu: The program will present you with a menu:
+e - Encrypt image
+d - Decrypt image
+q - Quit
+Choose Your Action: Select your desired option based on your needs (e for encryption, d for decryption, or q to quit).
+Encryption Process:
+Enter the encryption key (an integer).
+Provide the location or URL of the image you wish to encrypt.
+Decryption Process:
+Enter the decryption key (it must match the encryption key you used).
+Specify the location of the encrypted image.
+Output: The program will process the image and save the encrypted/decrypted version as encrypted_image.png or decrypted_image.png respectively.
+
+Note:
+Due to the simplicity of the encryption method employed, the quality of the decrypted image might be slightly lower compared to the original image. This is because of integer division and potential information loss.
+For robust encryption that provides a higher level of security, consider exploring more complex encryption algorithms.
+
+Author:
+Erramsetti Sai Vignesh
+
+Disclaimer:
+This tool is designed for educational purposes only. Please use it responsibly and be aware that it might not offer the highest level of security for sensitive data.
+
+This code presents the functionalities and instructions in a clear and user-friendly manner, while maintaining a professional tone. It also highlights the potential quality reduction in decrypted images and the need for stronger encryption for sensitive information.
+
+Code:-
+
+#Image Encryption And Decryption Tool
+#Before You Run This Program Make Sure To Install Pillow Package Command For Installing Is Given Below
+#Command - pip install pillow
+from PIL import Image
+import numpy as np
+print("Image Encryption Tool")
+def encrypt_image(image_path, key):
+    original_image = Image.open(image_path)
+    image_array = np.array(original_image)
+    encrypted_image_array = (image_array * key) // (key + 1)
+    encrypted_image = Image.fromarray(np.uint8(encrypted_image_array))
+    encrypted_image_path = "encrypted_image.png"
+    encrypted_image.save(encrypted_image_path)
+    print(f"Image encrypted successfully. Encrypted image saved at: {encrypted_image_path}")
+    exit()
+def decrypt_image(encrypted_image_path, key):
+    encrypted_image = Image.open(encrypted_image_path)
+    encrypted_image_array = np.array(encrypted_image)
+    decrypted_image_array = (encrypted_image_array * (key + 1)) // key
+    decrypted_image_array = np.clip(decrypted_image_array, 0, 255)
+    decrypted_image = Image.fromarray(np.uint8(decrypted_image_array))
+    decrypted_image_path = "decrypted_image.png"
+    decrypted_image.save(decrypted_image_path)
+    print(f"Image decrypted successfully. Decrypted image saved at: {decrypted_image_path}")
+    exit()
+def main():
+    while True:
+        print("Select an option:")
+        print("e - Encrypt image")
+        print("d - Decrypt image")
+        print("q - Quit")
+        choice = input("Your choice: ")
+        if choice == 'e':
+            encrypt_choice()
+        elif choice == 'd':
+            decrypt_choice()
+        elif choice == 'q':
+            print("Exitting the program.")
+            exit()
+        else:
+            print("Invalid choice. Please choose 'e' for encryption, 'd' for decryption, or 'q' to quit.")
+def encrypt_choice():
+    key = int(input("Enter encryption key: "))
+    image_location = input("Enter the location or URL of the image: ")
+    try:
+        encrypt_image(image_location, key)
+    except FileNotFoundError:
+        print("Invalid location. Image not found. Please try again.")
+        encrypt_choice()
+def decrypt_choice():
+    key = int(input("Enter decryption key: "))
+    encrypted_image_location = input("Enter the location of the encrypted image: ")
+    try:
+        decrypt_image(encrypted_image_location, key)
+    except FileNotFoundError:
+        print("Invalid location. Encrypted image not found. Please try again.")
+        decrypt_choice()
+if __name__ == "__main__":
+    main()
